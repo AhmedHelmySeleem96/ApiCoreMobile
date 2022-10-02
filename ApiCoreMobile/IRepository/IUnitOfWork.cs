@@ -6,7 +6,7 @@ namespace ApiCoreMobile.IRepository
     {
         IgenricRepository<Category> Catrgories { get; }
         IgenricRepository<Mobiles> Mobile { get; }
-
+     
         Task Save();
     }
 }

@@ -42,7 +42,7 @@ namespace ApiCoreMobile.Repository
             return await Query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
 
-        public Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> include = null)
+        public async Task<IList<T>> GetAll(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, List<string> include = null)
         {
             IQueryable<T> Query = _db;
             if(expression != null)
@@ -60,7 +60,7 @@ namespace ApiCoreMobile.Repository
             {
                 Query = orderBy(Query);
             }
-            return await Query.AsNoTracking();
+            return await Query.AsNoTracking().ToListAsync();
         }
 
         public async Task insert(T entity)
