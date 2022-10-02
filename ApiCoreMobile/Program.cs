@@ -1,3 +1,4 @@
+using ApiCoreMobile.Configuration;
 using ApiCoreMobile.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
@@ -14,6 +15,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DBConnection");
 builder.Services.AddDbContext<MobileContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("AllowAll", builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+});
+builder.Services.AddAutoMapper(typeof(MapperInitialize));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

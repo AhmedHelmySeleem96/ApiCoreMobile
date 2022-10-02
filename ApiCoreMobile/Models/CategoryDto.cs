@@ -5,6 +5,7 @@ namespace ApiCoreMobile.Models
     public class CategoryDto : CreateCategoryDto
     {
         public int Id { get; set; }
+        public IList<MobileDto> mobiles { get; set; }
     }
     public class CreateCategoryDto
     {
