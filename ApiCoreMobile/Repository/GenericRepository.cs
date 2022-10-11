@@ -21,11 +21,13 @@ namespace ApiCoreMobile.Repository
         {
             var entity = await _db.FindAsync(Id);
             _db.Remove(entity);
+            
         }
 
         public void DeleteRange(IEnumerable<T> entites)
         {
             _db.RemoveRange(entites);
+            
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> include = null)

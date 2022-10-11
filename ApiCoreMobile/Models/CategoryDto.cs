@@ -5,12 +5,12 @@ namespace ApiCoreMobile.Models
     public class CategoryDto : CreateCategoryDto
     {
         public int Id { get; set; }
-        public IList<MobileDto> mobiles { get; set; }
+        public IList<MobileDto>? mobile { get; set; }
     }
     public class CreateCategoryDto
     {
         [Required]
         [StringLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }
