@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiCoreMobile.Data
 {
-    public class MobileContext : DbContext
+    public class MobileContext : IdentityDbContext<ApiUser>
     {
         public MobileContext(DbContextOptions options) : base() { }
 
