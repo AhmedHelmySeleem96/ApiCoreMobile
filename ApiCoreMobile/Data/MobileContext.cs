@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ApiCoreMobile.Configuration;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiCoreMobile.Data
@@ -12,40 +13,9 @@ namespace ApiCoreMobile.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Mobiles>().HasData(
-                new Mobiles
-                {
-                    Id = 1,
-                    Name = "Iphone 6 ",
-                    Price = 6500,
-                    CategoryId = 1
-
-                },
-                new Mobiles
-                {
-                    Id = 2,
-                    Name = "Iphone 7 ",
-                    Price = 7500,
-                    CategoryId = 1
-                },
-                  new Mobiles
-                  {
-                      Id = 3,
-                      Name = "Iphone 8 ",
-                      Price = 9500,
-                      CategoryId = 1
-
-                  }
-                );
-            modelBuilder.Entity<Category>().HasData(
-                        new Category
-                        {
-                            Id = 1,
-                            Name = "Iphone"
-                        },
-                        new Category { Id = 2, Name = "Samsung" },
-                        new Category { Id = 3, Name = "Oppo" }
-                );
+            modelBuilder.ApplyConfiguration(new RoleConifguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MobileConfiguration());
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

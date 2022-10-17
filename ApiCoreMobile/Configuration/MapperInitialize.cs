@@ -12,7 +12,7 @@ namespace ApiCoreMobile.Configuration
             CreateMap<Category,CreateCategoryDto>().ReverseMap();
             CreateMap<Mobiles,MobileDto>().ReverseMap();
             CreateMap<Mobiles,CreateMobileDto>().ReverseMap();
-
+            CreateMap<ApiUser, UserDto>().ReverseMap();
         }
     }
 }
