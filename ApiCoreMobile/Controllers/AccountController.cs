@@ -31,8 +31,9 @@ namespace ApiCoreMobile.Controllers
                var user = _mapper.Map<ApiUser>(userDto);
                 user.UserName = userDto.Email; 
                 if (user == null) return BadRequest(ModelState);
-                var result = await _userManager.CreateAsync(user,userDto.Password);
-                if (!result.Succeeded) return BadRequest("Registeratio Is Atempt Failed");
+                var result = await _userManager.CreateAsync(user);
+                if (!result.Succeeded) return BadRequest($"Registeratio Is Atempt Failed ({result.Errors.FirstOrDefault().Description})");
+                await _userManager.AddToRolesAsync(user, userDto.Roles);
                 return Ok(result);
             }
             catch (Exception)
