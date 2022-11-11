@@ -17,11 +17,10 @@ namespace ApiCoreMobile.Services
         private  ApiUser _user;
         private readonly IConfiguration _configuration;
 
-        public AuthManager(UserManager<ApiUser> userManager, IMapper mapper, ApiUser user, IConfiguration configuration)
+        public AuthManager(UserManager<ApiUser> userManager, IMapper mapper, IConfiguration configuration)
         {
             _userManager = userManager;
             _mapper = mapper;
-            _user = user;
             _configuration = configuration;
         }
 
@@ -69,8 +68,11 @@ namespace ApiCoreMobile.Services
 
         public async Task<bool> ValidateUser(LoginDto userDto)
         {
+            //_user = await _userManager.FindByNameAsync(userDto.Email);
+            //return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
             _user = await _userManager.FindByNameAsync(userDto.Email);
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
+            //var validPassword = await _userManager.CheckPasswordAsync(_user, userDto.Password);
+            return (_user != null /*&& validPassword*/);
         }
     }
 }

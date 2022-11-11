@@ -2,6 +2,7 @@
 using ApiCoreMobile.IRepository;
 using ApiCoreMobile.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace ApiCoreMobile.Controllers
         private readonly IUnitOfWork? _unitOfWork;
         private readonly IMapper? _mapper;
 
-        public MobileController(IUnitOfWork? unitOfWork, IMapper? mapper)
+        public MobileController(IUnitOfWork unitOfWork, IMapper? mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -35,7 +36,8 @@ namespace ApiCoreMobile.Controllers
                 return StatusCode(500, "there Is An Error");
             }
         }
-        [HttpPost("{Id:int}")]
+        [HttpPost]
+        [Authorize]
         public async Task<IActionResult> GetMobile(int Id)
         {
             try

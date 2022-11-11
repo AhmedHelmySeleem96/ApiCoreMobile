@@ -1,5 +1,6 @@
 ﻿using ApiCoreMobile.Data;
 using ApiCoreMobile.Models;
+using ApiCoreMobile.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,14 +13,15 @@ namespace ApiCoreMobile.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<ApiUser> _userManager;
-        //private readonly SignInManager<ApiUser> _signInManager;
+        
         private readonly IMapper _mapper;
+        private readonly IAuthManager _authManager;
 
-        public AccountController(UserManager<ApiUser> userManager/*, SignInManager<ApiUser> signInManager*/, IMapper mapper)
+        public AccountController(UserManager<ApiUser> userManager, IMapper mapper,IAuthManager authManager)
         {
             _userManager = userManager;
-            //_signInManager = signInManager;
             _mapper = mapper;
+            _authManager = authManager;
         }
         [HttpPost]
         [Route("Register")]
@@ -29,7 +31,8 @@ namespace ApiCoreMobile.Controllers
             try
             {
                var user = _mapper.Map<ApiUser>(userDto);
-                user.UserName = userDto.Email; 
+                user.UserName = userDto.Email;
+                user.PasswordHash = userDto.Password;
                 if (user == null) return BadRequest(ModelState);
                 var result = await _userManager.CreateAsync(user);
                 if (!result.Succeeded) return BadRequest($"Registeratio Is Atempt Failed ({result.Errors.FirstOrDefault().Description})");
@@ -42,22 +45,26 @@ namespace ApiCoreMobile.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("Login")]
+        [HttpPost]
+        [Route("Login")]
 
-        //public async Task<IActionResult> Login([FromBody] LoginDto LoginDto)
-        //{
-        //    if (!ModelState.IsValid) return BadRequest(ModelState);
-        //    try
-        //    {
-        //        var result = await _signInManager.PasswordSignInAsync(LoginDto.Password, LoginDto.Email, false, false);
-        //        if (!result.Succeeded) return Unauthorized(LoginDto);
-        //        return Accepted(result);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return StatusCode(500, "There Is An Error In Registeration Process");
-        //    }
-        //}
+        public async Task<IActionResult> Login([FromBody] LoginDto LoginDto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                if (! await _authManager.ValidateUser(LoginDto))
+                {
+                    return Unauthorized();
+                }
+                return Accepted(new { Token = await _authManager.CreateToken() });
+
+            }
+            catch (Exception)
+            {
+                throw;
+                return StatusCode(500, "There Is An Error In Registeration Process");
+            }
+        }
     }
 }
