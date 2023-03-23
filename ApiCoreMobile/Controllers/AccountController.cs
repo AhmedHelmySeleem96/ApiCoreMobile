@@ -23,16 +23,40 @@ namespace ApiCoreMobile.Controllers
             _mapper = mapper;
             _authManager = authManager;
         }
+        //[HttpPost]
+        //[Route("Register")]
+        //public async Task<IActionResult> Register([FromBody]UserDto userDto )
+        //{
+        //    if (!ModelState.IsValid) return BadRequest(ModelState);
+        //    try
+        //    {
+        //       var user = _mapper.Map<ApiUser>(userDto);
+        //        user.UserName = userDto.Email;
+        //        user.PasswordHash = userDto.Password;
+        //        if (user == null) return BadRequest(ModelState);
+        //        var result = await _userManager.CreateAsync(user);
+        //        if (!result.Succeeded) return BadRequest($"Registeratio Is Atempt Failed ({result.Errors.FirstOrDefault().Description})");
+        //        await _userManager.AddToRolesAsync(user, userDto.Roles);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return StatusCode(500, "There Is An Error In Registeration Process");
+        //    }
+        //}
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody]UserDto userDto )
+        public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try
             {
-               var user = _mapper.Map<ApiUser>(userDto);
+                var user = _mapper.Map<ApiUser>(userDto);
                 user.UserName = userDto.Email;
-                user.PasswordHash = userDto.Password;
+
+                // Hash the password using the UserManager
+                var hashedPassword =  _userManager.PasswordHasher.HashPassword(user, userDto.Password);
+                user.PasswordHash = hashedPassword;
                 if (user == null) return BadRequest(ModelState);
                 var result = await _userManager.CreateAsync(user);
                 if (!result.Succeeded) return BadRequest($"Registeratio Is Atempt Failed ({result.Errors.FirstOrDefault().Description})");
@@ -45,10 +69,11 @@ namespace ApiCoreMobile.Controllers
             }
         }
 
+
         [HttpPost]
         [Route("Login")]
 
-        public async Task<IActionResult> Login([FromBody] LoginDto LoginDto)
+        public async Task<IActionResult> Login( LoginDto LoginDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             try

@@ -66,13 +66,19 @@ namespace ApiCoreMobile.Services
             return new SigningCredentials(secret,SecurityAlgorithms.HmacSha256);
         }
 
+        //public async Task<bool> ValidateUser(LoginDto userDto)
+        //{
+        //    _user = await _userManager.FindByNameAsync(userDto.Email);
+        //    return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
+        //    _user = await _userManager.FindByNameAsync(userDto.Email);
+        //    var validPassword = await _userManager.CheckPasswordAsync(_user, userDto.Password);
+        //    return (_user != null /*&& validPassword*/);
+        //}
         public async Task<bool> ValidateUser(LoginDto userDto)
         {
-            //_user = await _userManager.FindByNameAsync(userDto.Email);
-            //return (_user != null && await _userManager.CheckPasswordAsync(_user, userDto.Password));
             _user = await _userManager.FindByNameAsync(userDto.Email);
-            //var validPassword = await _userManager.CheckPasswordAsync(_user, userDto.Password);
-            return (_user != null /*&& validPassword*/);
+            var validPassword = (_user != null) ? await _userManager.CheckPasswordAsync(_user, userDto.Password) : false;
+            return (validPassword);
         }
     }
 }

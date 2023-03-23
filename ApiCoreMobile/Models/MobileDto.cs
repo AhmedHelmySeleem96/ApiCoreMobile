@@ -7,8 +7,6 @@ namespace ApiCoreMobile.Models
     public class MobileDto : CreateMobileDto
     {
         public int Id { get; set; }
-        public CategoryDto category { get; set; }
-
     }
     public class CreateMobileDto
     {

@@ -11,7 +11,5 @@ namespace ApiCoreMobile.Data
         public double Price { get; set; }
         [ForeignKey("Category")]    
         public int CategoryId { get; set; }
-        public Category category { get; set; }
-        
     }
 }
